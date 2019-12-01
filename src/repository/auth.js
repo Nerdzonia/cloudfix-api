@@ -67,7 +67,7 @@ const resetPassword = async (res, result) => {
 
         await user.save();
 
-        res.send({ data: {message: 'Password salvo' }});
+        res.send({ data: { message: 'Password salvo' } });
     } catch (err) {
         return err;
     }
@@ -84,7 +84,7 @@ const login = async (res, result) => {
             return res.status(400).send({ error: 'Usuário não encontrado!' });
 
         if (!await bcrypt.compare(password + HASH, user.password))
-            return res.status(400).send({ error: 'Senha invalida!' });
+            return res.status(400).send({ error: 'Email ou senha invalida!' });
 
         user.password = undefined;
 
@@ -119,11 +119,24 @@ const registerNewUser = async (res, result) => {
     } catch (err) {
         return res.status(400).send({ error: `Falha ao registrar novo usuário! ${err}` });
     }
+
+}
+
+const authenticate = async (res, id) => {
+    try{
+        const data = await User.findById(id);
+
+        return !!data;
+    }catch(err){
+        // return res.status(401).send({error: 'Token invalido.'});
+        return false;
+    }
 }
 
 module.exports = {
     changePassword,
     login,
     resetPassword,
-    registerNewUser
+    registerNewUser,
+    authenticate
 }
