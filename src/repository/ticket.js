@@ -62,7 +62,7 @@ const findTicketById = (res, id, populate) => {
 
 const addMessageTicket = async (res, id, ticketMessage = {}) => {
     try {
-        const { name, message } = ticketMessage;
+        const { name, message, userType } = ticketMessage;
 
         await Ticket.findById(id, async (err, doc) => {
             if (err)
@@ -71,7 +71,8 @@ const addMessageTicket = async (res, id, ticketMessage = {}) => {
             if (doc !== null) {
                 const chat = new Chat({
                     name,
-                    message
+                    message,
+                    userType
                 });
 
                 doc.chat.push(chat);
